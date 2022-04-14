@@ -10,14 +10,6 @@ import java.util.concurrent.Callable;
 public class Producer implements Callable<Object> {
 
     /**
-     * Счетчик.
-     * Необходим для контроля потребителей.
-     * Каждый раз, когда потребитель получает общую строку, отмеченную как "Sonny, Cher",
-     * потребитель увеличивает или обнуляет счетчик.
-     */
-    private static int counter = 0;
-
-    /**
      * Флаг завершения работы поставщика.
      */
     private static boolean done = false;
@@ -68,40 +60,7 @@ public class Producer implements Callable<Object> {
         return null;
     }
 
-    /**
-     * Метод проверки общей строки.
-     * Если в очереди встретилась общая строка ("Sonny, Cher"), то происходит проверка счетчика:
-     * если счетчик < 2, значит эта строка либо не появлялась в очереди совсем либо её уже обработал один из потребителей,
-     * увеличиваем счетчик и не удаляем эту строку из очереди.
-     * Иначе если счетчик >= 2 значит эту строку обработали оба потребителя, зануляем счетчик и удаляем строку из очереди.
-     *
-     * @param queue      очеред.
-     * @param str        элемент из очереди.
-     * @param threadName имя потока.
-     */
-    public static void checkCommonLine(BlockingQueue<String[]> queue, String[] str, String threadName) {
-        if (str[0].equals("Sonny, Cher")) {
-            int count = getCounter();
-            if (count < 2) {
-                System.out.println(threadName + ": " + str[1]);
-                count++;
-                setCounter(count);
-            } else {
-                queue.remove(str);
-                setCounter(0);
-            }
-        }
-    }
-
     public static boolean isDone() {
         return done;
-    }
-
-    public static int getCounter() {
-        return counter;
-    }
-
-    public static void setCounter(int counter) {
-        Producer.counter = counter;
     }
 }

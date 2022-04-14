@@ -23,13 +23,9 @@ public class Sonny implements Callable<Object> {
             while (true) {
                 if (!queue.isEmpty()) {
                     String[] str = queue.peek();
-                    if (str != null) {
-                        if (str[0].equals("Sonny")) {
-                            System.out.println(threadName + ": " + str[1]);
-                            queue.remove(str);
-                        } else {
-                            Producer.checkCommonLine(queue, str, threadName);
-                        }
+                    if (str != null && (str[0].equals("Sonny") || str[0].equals("Sonny, Cher"))) {
+                        System.out.println(threadName + ": " + str[1]);
+                        queue.remove(str);
                     }
                 } else {
                     //Условие остановки цикла.
